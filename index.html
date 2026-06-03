@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="ja" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="中野区長選挙の期日前投票状況を可視化するダッシュボードです。前回（令和4年）と今回（令和8年）の日々の投票者数や累計ペースの比較、投票所ごとの状況をグラフと表で確認できます。">
+    <title>中野区長選挙 期日前投票状況ダッシュボード (前回 vs 今回)</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-main">
+                <div class="logo-area">
+                    <span class="badge">選挙速報可視化</span>
+                    <h1>中野区長選挙 期日前投票状況</h1>
+                </div>
+                <div class="header-actions">
+                    <button id="theme-toggle-btn" class="icon-btn" aria-label="テーマ切り替え" title="テーマ切り替え">
+                        <!-- Sun Icon (shown in dark mode) -->
+                        <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path></svg>
+                        <!-- Moon Icon (shown in light mode) -->
+                        <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path></svg>
+                    </button>
+                </div>
+            </div>
+            <p class="subtitle">令和8年6月7日執行（今回） vs 令和4年5月22日執行（前回）の期日前投票状況をリアルタイム比較</p>
+        </header>
+
+        <!-- Stats Overview Cards -->
+        <section class="stats-grid" aria-label="投票統計概要">
+            <!-- Metric 1: Current Total -->
+            <div class="card stat-card" id="metric-current-total-card">
+                <div class="stat-header">
+                    <span class="stat-label">今回 投票者数累計</span>
+                    <span class="stat-icon-wrapper current">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                    </span>
+                </div>
+                <div class="stat-value" id="val-current-total">--</div>
+                <div class="stat-footer">
+                    <span class="stat-subtext" id="lbl-current-period">2日目（6/2）終了時点</span>
+                </div>
+            </div>
+
+            <!-- Metric 2: Comparison with Previous -->
+            <div class="card stat-card" id="metric-comparison-card">
+                <div class="stat-header">
+                    <span class="stat-label">前回同時期比</span>
+                    <span class="stat-icon-wrapper comparison" id="comparison-icon-container">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline><polyline points="16 7 22 7 22 13"></polyline></svg>
+                    </span>
+                </div>
+                <div class="stat-value" id="val-comparison">--</div>
+                <div class="stat-footer">
+                    <span class="stat-subtext" id="lbl-comparison-sub">前回同時期: -- 人</span>
+                </div>
+            </div>
+
+            <!-- Metric 3: Growth Rate -->
+            <div class="card stat-card" id="metric-growth-card">
+                <div class="stat-header">
+                    <span class="stat-label">投票増減率</span>
+                    <span class="stat-icon-wrapper growth" id="growth-icon-container">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><polyline points="19 12 12 19 5 12"></polyline></svg>
+                    </span>
+                </div>
+                <div class="stat-value" id="val-growth">--</div>
+                <div class="stat-footer">
+                    <span class="stat-subtext">前回同時期からの推移比</span>
+                </div>
+            </div>
+
+            <!-- Metric 4: Top Station -->
+            <div class="card stat-card" id="metric-top-station-card">
+                <div class="stat-header">
+                    <span class="stat-label">最多投票場所 (今回)</span>
+                    <span class="stat-icon-wrapper top-station">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                    </span>
+                </div>
+                <div class="stat-value" id="val-top-station">--</div>
+                <div class="stat-footer">
+                    <span class="stat-subtext" id="val-top-station-votes">-- 票 (全体の --%)</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Main Controls / Filters -->
+        <section class="controls-panel card" aria-label="表示設定">
+            <div class="control-group">
+                <label for="station-select">投票場所の選択:</label>
+                <div class="select-wrapper">
+                    <select id="station-select">
+                        <option value="ALL">すべての投票所 (合計)</option>
+                        <option value="区役所">区役所</option>
+                        <option value="南部すこやか">南部すこやか福祉センター</option>
+                        <option value="東部">東部区民活動センター</option>
+                        <option value="江古田">江古田区民活動センター</option>
+                        <option value="野方">野方区民活動センター</option>
+                        <option value="鷺宮">鷺宮区民活動センター</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="info-bubble">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                <span>グラフや表は、選択した投票場所に応じてリアルタイムに更新されます。</span>
+            </div>
+        </section>
+
+        <!-- Charts Layout Grid -->
+        <section class="charts-grid" aria-label="分析グラフ">
+            <!-- Chart 1: Daily Comparison -->
+            <div class="card chart-card">
+                <div class="chart-header">
+                    <h3>日別投票者数の比較</h3>
+                    <p class="chart-desc">日ごとの投票数推移（前回 vs 今回）</p>
+                </div>
+                <div class="chart-body">
+                    <canvas id="daily-comparison-chart" aria-label="日別投票者数比較グラフ"></canvas>
+                </div>
+            </div>
+
+            <!-- Chart 2: Cumulative Pacing -->
+            <div class="card chart-card">
+                <div class="chart-header">
+                    <h3>累計投票者数の比較</h3>
+                    <p class="chart-desc">日ごとの累積ペース（前回 vs 今回）</p>
+                </div>
+                <div class="chart-body">
+                    <canvas id="cumulative-pacing-chart" aria-label="累計投票者数比較グラフ"></canvas>
+                </div>
+            </div>
+
+            <!-- Chart 3: Voting Station Breakdown -->
+            <div class="card chart-card full-width-tablet">
+                <div class="chart-header">
+                    <h3>投票場所別の投票比率</h3>
+                    <p class="chart-desc">各投票所の累計得票数と全体比（今回2日目終了時点）</p>
+                </div>
+                <div class="chart-body station-chart-container">
+                    <canvas id="station-breakdown-chart" aria-label="投票場所別比率グラフ"></canvas>
+                </div>
+            </div>
+
+            <!-- Chart 4: Gender Breakdown (Current only) -->
+            <div class="card chart-card">
+                <div class="chart-header">
+                    <h3>性別投票者数推移（今回）</h3>
+                    <p class="chart-desc">男女別の日別および累計の推移</p>
+                </div>
+                <div class="chart-body">
+                    <canvas id="gender-breakdown-chart" aria-label="性別投票者数推移グラフ"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Data Table Section -->
+        <section class="table-section card" aria-label="投票データ詳細">
+            <div class="table-header">
+                <h2>投票データ詳細一覧</h2>
+                <div class="table-actions">
+                    <button id="download-csv-btn" class="btn secondary">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                        CSVダウンロード
+                    </button>
+                </div>
+            </div>
+            
+            <div class="table-wrapper">
+                <table id="voting-data-table">
+                    <thead>
+                        <tr>
+                            <th rowspan="2">日程</th>
+                            <th colspan="3" class="header-group current-group">今回 (令和8年)</th>
+                            <th class="header-group previous-group">前回 (令和4年)</th>
+                            <th rowspan="2">前同比 (計)</th>
+                        </tr>
+                        <tr>
+                            <th class="current-group">男</th>
+                            <th class="current-group">女</th>
+                            <th class="current-group highlighted-col">計</th>
+                            <th class="previous-group">計</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-body">
+                        <!-- Content generated dynamically by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+        
+        <!-- Footer -->
+        <footer class="app-footer-note">
+            <p>※データ出典：<a href="https://www.city.tokyo-nakano.lg.jp/kusei/senkyo/news/0237323820231016122829781.files/0602kutyou.pdf" target="_blank" rel="noopener noreferrer">中野区ホームページ「令和8年6月7日執行　中野区長選挙 期日前投票日計表」</a></p>
+            <p>※前回のデータは参考として記載されている「令和4年5月22日執行 中野区長選挙 期日前投票日計表」に基づきます。</p>
+        </footer>
+    </div>
+
+    <!-- Data & Script files -->
+    <script src="data.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

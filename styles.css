@@ -473,6 +473,19 @@ select:focus {
     background: rgba(var(--accent-current-rgb), 0.05);
 }
 
+.btn.primary-action-btn {
+    background: var(--accent-current);
+    color: var(--bg-primary) !important;
+    border: 1px solid var(--accent-current);
+    text-decoration: none;
+}
+
+.btn.primary-action-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(var(--accent-current-rgb), 0.35);
+    opacity: 0.9;
+}
+
 .table-wrapper {
     overflow-x: auto;
     border-radius: var(--border-radius-sm);

@@ -15,7 +15,8 @@ document.addEventListener('DOMContentLoaded', () => {
         daily: null,
         cumulative: null,
         station: null,
-        gender: null
+        gender: null,
+        past: null
     };
 
     // DOM Elements
@@ -596,6 +597,117 @@ document.addEventListener('DOMContentLoaded', () => {
                         stacked: true,
                         grid: { color: themeOpts.gridColor },
                         ticks: { color: themeOpts.textColor, font: fontConfig }
+                    }
+                }
+            }
+        });
+
+        // --- Chart 5: Past Elections (Line Chart) ---
+        const ctxPast = document.getElementById('past-elections-chart').getContext('2d');
+        const pastData = votingData.pastElections;
+        const labelsPast = pastData.map(d => d.shortLabel);
+        const totalsPast = pastData.map(d => d.total);
+        const malesPast = pastData.map(d => d.male);
+        const femalesPast = pastData.map(d => d.female);
+
+        charts.past = new Chart(ctxPast, {
+            type: 'line',
+            data: {
+                labels: labelsPast,
+                datasets: [
+                    {
+                        label: '全体 (投票率)',
+                        data: totalsPast,
+                        borderColor: 'rgba(6, 182, 212, 1)',
+                        backgroundColor: 'rgba(6, 182, 212, 0.1)',
+                        borderWidth: 3,
+                        pointBackgroundColor: 'rgba(6, 182, 212, 1)',
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 2,
+                        pointRadius: 5,
+                        pointHoverRadius: 7,
+                        fill: false,
+                        tension: 0.1
+                    },
+                    {
+                        label: '男性',
+                        data: malesPast,
+                        borderColor: 'rgba(59, 130, 246, 0.6)',
+                        backgroundColor: 'rgba(59, 130, 246, 0.05)',
+                        borderWidth: 1.5,
+                        pointBackgroundColor: 'rgba(59, 130, 246, 0.8)',
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 1,
+                        pointRadius: 3.5,
+                        pointHoverRadius: 5,
+                        fill: false,
+                        tension: 0.1
+                    },
+                    {
+                        label: '女性',
+                        data: femalesPast,
+                        borderColor: 'rgba(236, 72, 153, 0.6)',
+                        backgroundColor: 'rgba(236, 72, 153, 0.05)',
+                        borderWidth: 1.5,
+                        pointBackgroundColor: 'rgba(236, 72, 153, 0.8)',
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 1,
+                        pointRadius: 3.5,
+                        pointHoverRadius: 5,
+                        fill: false,
+                        tension: 0.1
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: { color: themeOpts.textColor, font: fontConfig }
+                    },
+                    tooltip: {
+                        backgroundColor: themeOpts.tooltipBg,
+                        titleColor: themeOpts.tooltipText,
+                        bodyColor: themeOpts.tooltipText,
+                        borderColor: themeOpts.tooltipBorder,
+                        borderWidth: 1,
+                        callbacks: {
+                            title: function(context) {
+                                if (context && context.length > 0) {
+                                    const index = context[0].dataIndex;
+                                    return pastData[index].label;
+                                }
+                                return '';
+                            },
+                            label: function(context) {
+                                let label = context.dataset.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                if (context.parsed.y !== null) {
+                                    label += context.parsed.y.toFixed(2) + '%';
+                                }
+                                return label;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { display: false },
+                        ticks: { color: themeOpts.textColor, font: fontConfig }
+                    },
+                    y: {
+                        grid: { color: themeOpts.gridColor },
+                        ticks: { 
+                            color: themeOpts.textColor, 
+                            font: fontConfig,
+                            callback: function(value) {
+                                return value + '%';
+                            }
+                        }
                     }
                 }
             }

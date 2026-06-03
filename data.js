@@ -12,6 +12,23 @@ const votingData = {
       "鷺宮": [189, 312, 340, 492, 723, 988]
     }
   },
+  // 過去の中野区長選挙の投票率データ
+  pastElections: [
+    { "label": "昭和22年4月5日", "shortLabel": "S22 (4/5)", "total": 53.86, "male": 52.04, "female": 56.10 },
+    { "label": "昭和26年4月23日", "shortLabel": "S26 (4/23)", "total": 68.50, "male": 66.12, "female": 70.90 },
+    { "label": "昭和50年4月27日", "shortLabel": "S50 (4/27)", "total": 54.10, "male": 51.37, "female": 56.68 },
+    { "label": "昭和54年4月22日", "shortLabel": "S54 (4/22)", "total": 57.59, "male": 54.46, "female": 60.51 },
+    { "label": "昭和58年4月24日", "shortLabel": "S58 (4/24)", "total": 57.09, "male": 53.65, "female": 60.33 },
+    { "label": "昭和61年6月15日", "shortLabel": "S61 (6/15)", "total": 44.20, "male": 41.75, "female": 46.54 },
+    { "label": "平成2年6月3日", "shortLabel": "H2 (6/3)", "total": 41.56, "male": 38.69, "female": 44.27 },
+    { "label": "平成10年5月24日", "shortLabel": "H10 (5/24)", "total": 25.21, "male": 23.83, "female": 26.54 },
+    { "label": "平成14年6月9日", "shortLabel": "H14 (6/9)", "total": 33.42, "male": 31.46, "female": 35.31 },
+    { "label": "平成18年6月11日", "shortLabel": "H18 (6/11)", "total": 27.73, "male": 25.99, "female": 29.44 },
+    { "label": "平成22年5月23日", "shortLabel": "H22 (5/23)", "total": 30.28, "male": 29.12, "female": 31.44 },
+    { "label": "平成26年6月8日", "shortLabel": "H26 (6/8)", "total": 29.49, "male": 28.05, "female": 30.94 },
+    { "label": "平成30年6月10日", "shortLabel": "H30 (6/10)", "total": 34.45, "male": 32.99, "female": 35.92 },
+    { "label": "令和4年5月22日", "shortLabel": "R4 (5/22)", "total": 33.72, "male": 32.55, "female": 34.89 }
+  ],
   
   // 今回 (令和8年6月7日執行 中野区長選挙)
   current: {

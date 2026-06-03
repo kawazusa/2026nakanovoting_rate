@@ -13,14 +13,14 @@
     <meta property="og:url" content="https://kawazusa.github.io/2026nakanovoting_rate/">
     <meta property="og:title" content="中野区長選挙 期日前投票状況ダッシュボード (前回 vs 今回)">
     <meta property="og:description" content="前回（令和4年）と今回（令和8年）の中野区長選挙の期日前投票状況を日ごと比較できるダッシュボードです。毎日21:15頃に最新データへ自動更新されます。">
-    <meta property="og:image" content="https://kawazusa.github.io/2026nakanovoting_rate/ogp-image.png?v=202606032327">
+    <meta property="og:image" content="https://kawazusa.github.io/2026nakanovoting_rate/ogp-image.png?v=202606040718">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://kawazusa.github.io/2026nakanovoting_rate/">
     <meta property="twitter:title" content="中野区長選挙 期日前投票状況ダッシュボード (前回 vs 今回)">
     <meta property="twitter:description" content="前回（令和4年）と今回（令和8年）の中野区長選挙の期日前投票状況を日ごと比較できるダッシュボードです。毎日21:15頃に最新データへ自動更新されます。">
-    <meta property="twitter:image" content="https://kawazusa.github.io/2026nakanovoting_rate/ogp-image.png?v=202606032327">
+    <meta property="twitter:image" content="https://kawazusa.github.io/2026nakanovoting_rate/ogp-image.png?v=202606040718">
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -184,6 +184,17 @@
                 <div class="chart-body">
                     <canvas id="gender-breakdown-chart" aria-label="性別投票者数推移グラフ"></canvas>
                 </div>
+            </div>
+        </section>
+
+        <!-- Past Elections Section -->
+        <section class="past-elections-section card" aria-label="過去の中野区長選挙の投票率推移">
+            <div class="chart-header" style="padding: 24px 24px 0 24px;">
+                <h3>過去の中野区長選挙の投票率推移</h3>
+                <p class="chart-desc">昭和22年（第1回）から令和4年（前回）までの区長選挙の投票率（全体・男女別）の推移</p>
+            </div>
+            <div class="chart-body" style="padding: 0 24px 24px 24px; min-height: 380px; height: 380px; position: relative; width: 100%;">
+                <canvas id="past-elections-chart" aria-label="過去の中野区長選挙投票率推移グラフ"></canvas>
             </div>
         </section>
 

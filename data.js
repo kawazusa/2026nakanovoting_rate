@@ -12,37 +12,36 @@ const votingData = {
       "鷺宮": [189, 312, 340, 492, 723, 988]
     }
   },
+  
   // 今回 (令和8年6月7日執行 中野区長選挙)
   current: {
     title: "令和8年6月7日執行 中野区長選挙",
     dateRange: ["6/1(月)", "6/2(火)", "6/3(水)", "6/4(木)", "6/5(金)", "6/6(土)"],
-    // Gender-specific data (Male/Female)
-    // null values for days 3-6 represent future days (not yet voted)
     stations: {
-      "区役所": {
-        male: [731, 594, null, null, null, null],
-        female: [712, 690, null, null, null, null]
-      },
-      "南部すこやか": {
-        male: [157, 156, null, null, null, null],
-        female: [155, 190, null, null, null, null]
-      },
-      "東部": {
-        male: [143, 140, null, null, null, null],
-        female: [147, 158, null, null, null, null]
-      },
-      "江古田": {
-        male: [88, 99, null, null, null, null],
-        female: [95, 101, null, null, null, null]
-      },
-      "野方": {
-        male: [160, 151, null, null, null, null],
-        female: [166, 189, null, null, null, null]
-      },
-      "鷺宮": {
-        male: [150, 144, null, null, null, null],
-        female: [180, 185, null, null, null, null]
-      }
+    "区役所": {
+      male: [731, 594, 388, null, null, null],
+      female: [712, 690, 323, null, null, null]
+    },
+    "南部すこやか": {
+      male: [157, 156, 106, null, null, null],
+      female: [155, 190, 99, null, null, null]
+    },
+    "東部": {
+      male: [143, 140, 72, null, null, null],
+      female: [147, 158, 74, null, null, null]
+    },
+    "江古田": {
+      male: [88, 99, 67, null, null, null],
+      female: [95, 101, 55, null, null, null]
+    },
+    "野方": {
+      male: [160, 151, 95, null, null, null],
+      female: [166, 189, 101, null, null, null]
+    },
+    "鷺宮": {
+      male: [150, 144, 65, null, null, null],
+      female: [180, 185, 62, null, null, null]
+    }
     }
   }
 };

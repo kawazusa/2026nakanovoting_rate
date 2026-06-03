@@ -206,7 +206,7 @@ def generate_data_js(male_data, female_data, output_path):
     print(f"Wrote data.js.")
 
 def update_index_html_version(timestamp):
-    # Overwrite the cache busting version parameter in index.html OGP tags
+    # Overwrite the cache busting version parameter in index.html tags
     index_path = "index.html"
     if not os.path.exists(index_path):
         print("index.html not found, skipping version update.")
@@ -216,10 +216,13 @@ def update_index_html_version(timestamp):
         html = f.read()
         
     html_updated = re.sub(r'ogp-image\.png(?:\?v=\d+)?', f'ogp-image.png?v={timestamp}', html)
+    html_updated = re.sub(r'styles\.css(?:\?v=\d+)?', f'styles.css?v={timestamp}', html_updated)
+    html_updated = re.sub(r'data\.js(?:\?v=\d+)?', f'data.js?v={timestamp}', html_updated)
+    html_updated = re.sub(r'app\.js(?:\?v=\d+)?', f'app.js?v={timestamp}', html_updated)
     
     with open(index_path, "w", encoding="utf-8") as f:
         f.write(html_updated)
-    print(f"Updated index.html OGP image version tag to ?v={timestamp}")
+    print(f"Updated index.html version tags to ?v={timestamp}")
 
 def recreate_ogp_image():
     browser_path = find_chrome()

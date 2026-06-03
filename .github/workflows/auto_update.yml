@@ -23,10 +23,12 @@ jobs:
         with:
           python-version: '3.x'
 
-      - name: Install Dependencies
+      - name: Install Dependencies & Japanese Fonts
         run: |
+          sudo apt-get update
+          sudo apt-get install -y fonts-noto-cjk
           python -m pip install --upgrade pip
-          pip install pypdf
+          pip install pypdf Pillow
 
       - name: Run Scraper and Update Data
         run: |
@@ -36,7 +38,7 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data.js
+          git add data.js ogp-image.png index.html
           
           # Check if there are any modifications staged for commit
           if git diff --cached --quiet; then

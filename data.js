@@ -36,28 +36,28 @@ const votingData = {
     dateRange: ["6/1(月)", "6/2(火)", "6/3(水)", "6/4(木)", "6/5(金)", "6/6(土)"],
     stations: {
     "区役所": {
-      male: [731, 594, 388, null, null, null],
-      female: [712, 690, 323, null, null, null]
+      male: [731, 594, 388, 1089, null, null],
+      female: [712, 690, 323, 1352, null, null]
     },
     "南部すこやか": {
-      male: [157, 156, 106, null, null, null],
-      female: [155, 190, 99, null, null, null]
+      male: [157, 156, 106, 304, null, null],
+      female: [155, 190, 99, 372, null, null]
     },
     "東部": {
-      male: [143, 140, 72, null, null, null],
-      female: [147, 158, 74, null, null, null]
+      male: [143, 140, 72, 215, null, null],
+      female: [147, 158, 74, 306, null, null]
     },
     "江古田": {
-      male: [88, 99, 67, null, null, null],
-      female: [95, 101, 55, null, null, null]
+      male: [88, 99, 67, 178, null, null],
+      female: [95, 101, 55, 235, null, null]
     },
     "野方": {
-      male: [160, 151, 95, null, null, null],
-      female: [166, 189, 101, null, null, null]
+      male: [160, 151, 95, 287, null, null],
+      female: [166, 189, 101, 411, null, null]
     },
     "鷺宮": {
-      male: [150, 144, 65, null, null, null],
-      female: [180, 185, 62, null, null, null]
+      male: [150, 144, 65, 249, null, null],
+      female: [180, 185, 62, 369, null, null]
     }
     }
   }

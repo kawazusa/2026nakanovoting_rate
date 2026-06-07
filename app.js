@@ -58,12 +58,30 @@ document.addEventListener('DOMContentLoaded', () => {
         // Download CSV
         downloadCsvBtn.addEventListener('click', downloadCSV);
 
+        // Setup Share URLs dynamically with hourly cache busting
+        const xBtn = document.querySelector('.x-btn');
+        const lineBtn = document.querySelector('.line-btn');
+        const shareBaseUrl = "https://kawazusa.github.io/2026nakanovoting_rate/";
+        
+        // Generate hourly string key in JST (e.g., "2026060712") to bust OGP cache hourly
+        const now = new Date();
+        const jstDate = new Date(now.getTime() + (9 * 60 * 60 * 1000));
+        const dateKey = jstDate.toISOString().slice(0, 13).replace(/[-T]/g, '');
+        const shareUrlWithBust = `${shareBaseUrl}?v=${dateKey}`;
+        
+        if (xBtn) {
+            const shareText = "中野区長選挙 投票状況ダッシュボード (前回 vs 今回) - 投票日当日の時間別投票率もリアルタイム速報中！";
+            xBtn.href = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrlWithBust)}&hashtags=中野区長選挙,中野区長選挙2026`;
+        }
+        if (lineBtn) {
+            lineBtn.href = `https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(shareUrlWithBust)}`;
+        }
+
         // Copy Share Link
         const copyLinkBtn = document.getElementById('copy-link-btn');
         if (copyLinkBtn) {
             copyLinkBtn.addEventListener('click', () => {
-                const url = window.location.href.split('?')[0]; // strip version tags
-                navigator.clipboard.writeText(url).then(() => {
+                navigator.clipboard.writeText(shareUrlWithBust).then(() => {
                     const originalText = copyLinkBtn.innerHTML;
                     copyLinkBtn.innerHTML = `
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent-success)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>

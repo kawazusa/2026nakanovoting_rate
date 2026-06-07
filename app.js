@@ -956,12 +956,64 @@ document.addEventListener('DOMContentLoaded', () => {
         tableBody.appendChild(trPrevTotal);
     }
 
+    // Re-renders the today's voting results table
+    function updateTodayTable(todayData) {
+        const todayTableBody = document.getElementById('today-table-body');
+        if (!todayTableBody) return;
+        
+        todayTableBody.innerHTML = '';
+        
+        todayData.forEach(row => {
+            const tr = document.createElement('tr');
+            
+            // Col 1: Time
+            const tdTime = document.createElement('td');
+            tdTime.textContent = row.time + '時点';
+            tdTime.style.textAlign = 'left';
+            tdTime.style.fontWeight = '600';
+            tr.appendChild(tdTime);
+            
+            // Col 2: Current Votes
+            const tdCurrVotes = document.createElement('td');
+            tdCurrVotes.textContent = row.currentVotes.toLocaleString() + ' 人';
+            tr.appendChild(tdCurrVotes);
+            
+            // Col 3: Current Rate
+            const tdCurrRate = document.createElement('td');
+            tdCurrRate.textContent = row.currentRate.toFixed(2) + '%';
+            tdCurrRate.className = 'highlighted-col';
+            tr.appendChild(tdCurrRate);
+            
+            // Col 4: Previous Votes
+            const tdPrevVotes = document.createElement('td');
+            tdPrevVotes.textContent = row.previousVotes.toLocaleString() + ' 人';
+            tr.appendChild(tdPrevVotes);
+            
+            // Col 5: Previous Rate
+            const tdPrevRate = document.createElement('td');
+            tdPrevRate.textContent = row.previousRate.toFixed(2) + '%';
+            tr.appendChild(tdPrevRate);
+            
+            // Col 6: Diff
+            const tdDiff = document.createElement('td');
+            const diff = row.currentRate - row.previousRate;
+            const diffSign = diff >= 0 ? '+' : '';
+            const diffColor = diff >= 0 ? 'positive-change' : 'negative-change';
+            tdDiff.innerHTML = `<span class="${diffColor}">${diffSign}${diff.toFixed(2)}%</span>`;
+            tdDiff.style.textAlign = 'center';
+            tr.appendChild(tdDiff);
+            
+            todayTableBody.appendChild(tr);
+        });
+    }
+
     // Handles the calculations and rendering
     function updateDashboard() {
         const data = getAggregatedData(state.station);
         updateMetrics(data);
         updateCharts(data);
         updateTable(data);
+        updateTodayTable(votingData.todayVoting || []);
     }
 
     // Handles CSV creation and downloading

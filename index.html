@@ -3,24 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="中野区長選挙の期日前投票状況を可視化するダッシュボードです。前回（令和4年）と今回（令和8年）の日々の投票者数や累計ペースの比較、投票所ごとの状況をグラフと表で確認できます。">
-    <title>中野区長選挙 期日前投票状況ダッシュボード (前回 vs 今回)</title>
+    <meta name="description" content="中野区長選挙の投票状況を可視化するダッシュボードです。前回（令和4年）と今回（令和8年）の日々の投票者数や累計ペースの比較、投票所ごとの状況をグラフと表で確認できます。">
+    <title>中野区長選挙 投票状況ダッシュボード (前回 vs 今回)</title>
     <link rel="icon" type="image/png" href="favicon.png">
     <link rel="apple-touch-icon" href="favicon.png">
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://kawazusa.github.io/2026nakanovoting_rate/">
-    <meta property="og:title" content="中野区長選挙 期日前投票状況ダッシュボード (前回 vs 今回)">
-    <meta property="og:description" content="前回（令和4年）と今回（令和8年）の中野区長選挙の期日前投票状況を日ごと比較できるダッシュボードです。毎日21:15頃に最新データへ自動更新されます。">
-    <meta property="og:image" content="https://kawazusa.github.io/2026nakanovoting_rate/ogp-image.png?v=202606071126">
+    <meta property="og:title" content="中野区長選挙 投票状況ダッシュボード (前回 vs 今回)">
+    <meta property="og:description" content="前回（令和4年）と今回（令和8年）の中野区長選挙の投票状況（期日前・当日投票率）をリアルタイムに比較できるダッシュボードです。毎日21:15頃に最新データへ自動更新されます。">
+    <meta property="og:image" content="https://kawazusa.github.io/2026nakanovoting_rate/ogp-image.png?v=202606071130">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://kawazusa.github.io/2026nakanovoting_rate/">
-    <meta property="twitter:title" content="中野区長選挙 期日前投票状況ダッシュボード (前回 vs 今回)">
-    <meta property="twitter:description" content="前回（令和4年）と今回（令和8年）の中野区長選挙の期日前投票状況を日ごと比較できるダッシュボードです。毎日21:15頃に最新データへ自動更新されます。">
-    <meta property="twitter:image" content="https://kawazusa.github.io/2026nakanovoting_rate/ogp-image.png?v=202606071126">
+    <meta property="twitter:title" content="中野区長選挙 投票状況ダッシュボード (前回 vs 今回)">
+    <meta property="twitter:description" content="前回（令和4年）と今回（令和8年）の中野区長選挙の投票状況（期日前・当日投票率）をリアルタイムに比較できるダッシュボードです。毎日21:15頃に最新データへ自動更新されます。">
+    <meta property="twitter:image" content="https://kawazusa.github.io/2026nakanovoting_rate/ogp-image.png?v=202606071130">
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -31,7 +31,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="styles.css?v=202606071126">
+    <link rel="stylesheet" href="styles.css?v=202606071130">
 </head>
 <body>
     <div class="app-container">
@@ -40,7 +40,7 @@
             <div class="header-main">
                 <div class="logo-area">
                     <span class="badge">選挙速報可視化</span>
-                    <h1>中野区長選挙 期日前投票状況</h1>
+                    <h1>中野区長選挙 投票状況</h1>
                 </div>
                 <div class="header-actions">
                     <a href="https://kawazusa.github.io/2026nakanovote/" class="btn primary-action-btn" target="_blank" rel="noopener noreferrer">
@@ -55,7 +55,7 @@
                     </button>
                 </div>
             </div>
-            <p class="subtitle">令和8年6月7日執行（今回） vs 令和4年5月22日執行（前回）の期日前投票状況を日ごと比較</p>
+            <p class="subtitle">令和8年6月7日執行（今回） vs 令和4年5月22日執行（前回）の投票状況（期日前・当日の投票率）を比較</p>
         </header>
 
         <!-- Stats Overview Cards -->
@@ -157,6 +157,28 @@
             </div>
             <div class="chart-body" style="padding: 0 24px 24px 24px; min-height: 340px; height: 340px; position: relative; width: 100%;">
                 <canvas id="today-voting-chart" aria-label="投票日当日時間別投票状況グラフ"></canvas>
+            </div>
+            <!-- Today's Voting Results Table -->
+            <div class="table-wrapper" style="margin: 0 24px 24px 24px;">
+                <table id="today-voting-table">
+                    <thead>
+                        <tr>
+                            <th rowspan="2">時点</th>
+                            <th colspan="2" class="header-group current-group">今回 (令和8年)</th>
+                            <th colspan="2" class="header-group previous-group">前回 (令和4年)</th>
+                            <th rowspan="2" style="text-align: center;">投票率差</th>
+                        </tr>
+                        <tr>
+                            <th class="current-group">投票者数</th>
+                            <th class="current-group">投票率</th>
+                            <th class="previous-group">投票者数</th>
+                            <th class="previous-group">投票率</th>
+                        </tr>
+                    </thead>
+                    <tbody id="today-table-body">
+                        <!-- Content generated dynamically by JavaScript -->
+                    </tbody>
+                </table>
             </div>
         </section>
 
@@ -265,7 +287,7 @@
     </div>
 
     <!-- Data & Script files -->
-    <script src="data.js?v=202606071126"></script>
-    <script src="app.js?v=202606071126"></script>
+    <script src="data.js?v=202606071130"></script>
+    <script src="app.js?v=202606071130"></script>
 </body>
 </html>

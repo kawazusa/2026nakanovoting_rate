@@ -369,7 +369,7 @@ def recreate_ogp_image():
     
     draw.text(
         (65, 150), 
-        "期日前投票状況", 
+        "投票状況", 
         font=font_large_title, 
         fill=(10, 14, 23, 255), 
         stroke_width=5, 
@@ -385,7 +385,7 @@ def recreate_ogp_image():
         stroke_fill=(255, 255, 255, 255)
     )
     
-    draw.text((65, 345), "前回（令和4年）の投票ペースと日別・累計で比較可能", font=font_desc, fill=(156, 163, 175, 255))
+    draw.text((65, 345), "投票日の時間別投票状況と期日前投票のペースを可視化", font=font_desc, fill=(156, 163, 175, 255))
     draw.line([(65, 395), (550, 395)], fill=(255, 255, 255, 20))
     draw.text((65, 415), "作成：子育て環境向上委員会@中野", font=font_author, fill=(255, 255, 255, 230))
     

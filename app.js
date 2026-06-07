@@ -28,8 +28,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Metrics DOM Elements
     const valCurrentTotal = document.getElementById('val-current-total');
+    const lblCurrentTotalTitle = document.getElementById('lbl-current-total-title');
     const lblCurrentPeriod = document.getElementById('lbl-current-period');
     const valComparison = document.getElementById('val-comparison');
+    const lblComparisonTitle = document.getElementById('lbl-comparison-title');
     const lblComparisonSub = document.getElementById('lbl-comparison-sub');
     const valGrowth = document.getElementById('val-growth');
     const valTopStation = document.getElementById('val-top-station');
@@ -231,14 +233,49 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateMetrics(data) {
         // 1. Current Election Total (Cumulative)
         const validValues = data.currentCumulative.filter(v => v !== null);
-        const currentTotal = validValues.length > 0 ? validValues[validValues.length - 1] : 0;
+        const earlyTotalCurrent = validValues.length > 0 ? validValues[validValues.length - 1] : 0;
         const currentDaysAvailable = validValues.length;
-        
-        valCurrentTotal.textContent = currentTotal.toLocaleString() + " 票";
-        lblCurrentPeriod.textContent = `${currentDaysAvailable}日目（${votingData.current.dateRange[currentDaysAvailable - 1]}）終了時点`;
+        const earlyTotalPrevious = data.previousCumulative[currentDaysAvailable - 1];
 
-        // 2. Comparison with previous election at the same period
-        const previousSamePeriodTotal = data.previousCumulative[currentDaysAvailable - 1];
+        // Fetch latest today voting data
+        const todayVotingArray = votingData.todayVoting || [];
+        const activeTodayBulletins = todayVotingArray.filter(v => v.currentVotes > 0);
+        const latestTodayBulletin = activeTodayBulletins.length > 0 ? activeTodayBulletins[activeTodayBulletins.length - 1] : null;
+
+        let todayCurrentVotes = 0;
+        let todayPreviousVotes = 0;
+        let latestTimeLabel = "";
+
+        if (latestTodayBulletin) {
+            todayCurrentVotes = latestTodayBulletin.currentVotes;
+            todayPreviousVotes = latestTodayBulletin.previousVotes;
+            latestTimeLabel = latestTodayBulletin.time;
+        }
+
+        let currentTotal = earlyTotalCurrent;
+        let previousSamePeriodTotal = earlyTotalPrevious;
+
+        if (state.station === 'ALL' && latestTodayBulletin) {
+            // Add today's voting if it is for ALL stations
+            currentTotal = earlyTotalCurrent + todayCurrentVotes;
+            previousSamePeriodTotal = earlyTotalPrevious + todayPreviousVotes;
+
+            if (lblCurrentTotalTitle) lblCurrentTotalTitle.textContent = "今回 投票者数合計 (期日前+当日)";
+            if (lblComparisonTitle) lblComparisonTitle.textContent = "前回同時期比 (期日前+当日)";
+            lblCurrentPeriod.textContent = `期日前(終了) + 当日 ${latestTimeLabel}時点`;
+        } else {
+            // Otherwise, show early voting only (station-specific or no today bulletin data)
+            if (lblCurrentTotalTitle) lblCurrentTotalTitle.textContent = "今回 期日前投票者数累計";
+            if (lblComparisonTitle) lblComparisonTitle.textContent = "前回期日前 同時期比";
+            
+            if (state.station !== 'ALL') {
+                lblCurrentPeriod.textContent = `期日前投票 ${currentDaysAvailable}日目（${votingData.current.dateRange[currentDaysAvailable - 1]}）終了時点`;
+            } else {
+                lblCurrentPeriod.textContent = `期日前投票 ${currentDaysAvailable}日目（最終日）終了時点`;
+            }
+        }
+
+        valCurrentTotal.textContent = currentTotal.toLocaleString() + " 票";
         valComparison.textContent = previousSamePeriodTotal.toLocaleString() + " 票";
         lblComparisonSub.textContent = `前回同時期: ${previousSamePeriodTotal.toLocaleString()} 票`;
 

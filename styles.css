@@ -167,6 +167,18 @@ body {
     border: 1px solid rgba(var(--accent-current-rgb), 0.3);
 }
 
+.badge.early {
+    background: rgba(var(--accent-previous-rgb), 0.15);
+    color: var(--accent-previous);
+    border: 1px solid rgba(var(--accent-previous-rgb), 0.3);
+}
+
+.badge.today {
+    background: rgba(var(--accent-current-rgb), 0.15);
+    color: var(--accent-current);
+    border: 1px solid rgba(var(--accent-current-rgb), 0.3);
+}
+
 h1 {
     font-size: 2.25rem;
     font-weight: 700;

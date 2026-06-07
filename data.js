@@ -30,6 +30,38 @@ const votingData = {
     { "label": "令和4年5月22日", "shortLabel": "R4 (5/22)", "total": 33.72, "male": 32.55, "female": 34.89 }
   ],
   
+  // 当日投票状況 (時間別速報)
+  todayVoting: [
+      {
+          "time": "8時",
+          "currentVotes": 50,
+          "currentRate": 0.02,
+          "previousVotes": 0,
+          "previousRate": 0.0
+      },
+      {
+          "time": "9時",
+          "currentVotes": 1650,
+          "currentRate": 0.6,
+          "previousVotes": 1650,
+          "previousRate": 0.6
+      },
+      {
+          "time": "10時",
+          "currentVotes": 5750,
+          "currentRate": 2.09,
+          "previousVotes": 5750,
+          "previousRate": 2.1
+      },
+      {
+          "time": "11時",
+          "currentVotes": 12000,
+          "currentRate": 4.36,
+          "previousVotes": 11950,
+          "previousRate": 4.37
+      }
+  ],
+  
   // 今回 (令和8年6月7日執行 中野区長選挙)
   current: {
     title: "令和8年6月7日執行 中野区長選挙",

@@ -173,7 +173,43 @@ def parse_pdf(pdf_path):
             
     return male_data, female_data
 
-def generate_data_js(male_data, female_data, output_path):
+def get_hourly_voting():
+    url = "https://www.city.tokyo-nakano.lg.jp/kusei/senkyo/news/260607touhyou.html"
+    print(f"Fetching hourly voting page: {url}")
+    headers = {'User-Agent': 'Mozilla/5.0'}
+    req = urllib.request.Request(url, headers=headers)
+    
+    try:
+        with urllib.request.urlopen(req) as response:
+            html = response.read().decode('utf-8')
+            
+        pattern = r'<tr>\s*<th scope="row">([^<]+)</th>\s*<td>([^<]+)</td>\s*<td>([^<]+)</td>\s*<td>([^<]+)</td>\s*<td>([^<]+)</td>\s*</tr>'
+        matches = re.findall(pattern, html)
+        
+        hourly_data = []
+        # Matches are sorted from newest to oldest in HTML, reverse them for chronological order
+        for m in reversed(matches):
+            time_label = m[0].replace("時点", "")
+            
+            curr_votes = int(m[1].replace(",", ""))
+            curr_rate = float(m[2])
+            prev_votes = int(m[3].replace(",", ""))
+            prev_rate = float(m[4])
+            
+            hourly_data.append({
+                "time": time_label,
+                "currentVotes": curr_votes,
+                "currentRate": curr_rate,
+                "previousVotes": prev_votes,
+                "previousRate": prev_rate
+            })
+        print(f"Parsed {len(hourly_data)} hourly records successfully.")
+        return hourly_data
+    except Exception as e:
+        print(f"Failed to fetch or parse hourly voting: {e}")
+        return []
+
+def generate_data_js(male_data, female_data, hourly_data, output_path):
     station_blocks = []
     for s in STATIONS:
         male_list_str = str(male_data[s]).replace("None", "null")
@@ -187,9 +223,21 @@ def generate_data_js(male_data, female_data, output_path):
         
     stations_js = ",\n".join(station_blocks)
     
+    # Format hourly data as JSON
+    import json
+    hourly_json = json.dumps(hourly_data, ensure_ascii=False, indent=4)
+    # Indent it matching the layout of the file
+    hourly_js_lines = []
+    for line in hourly_json.split("\n"):
+        hourly_js_lines.append("  " + line)
+    hourly_js = "\n".join(hourly_js_lines).strip()
+    
     js_content = f"""const votingData = {{
 {PREVIOUS_DATA}
 {PAST_ELECTIONS_DATA}
+  
+  // 当日投票状況 (時間別速報)
+  todayVoting: {hourly_js},
   
   // 今回 (令和8年6月7日執行 中野区長選挙)
   current: {{
@@ -359,8 +407,11 @@ def main():
         download_pdf(pdf_url, temp_pdf)
         male_data, female_data = parse_pdf(temp_pdf)
         
+        # Fetch hourly voting data
+        hourly_data = get_hourly_voting()
+        
         # Overwrite data.js
-        generate_data_js(male_data, female_data, "data.js")
+        generate_data_js(male_data, female_data, hourly_data, "data.js")
         
         # Update index.html OGP image URL with timestamp query parameter to bust cache
         timestamp = datetime.now().strftime("%Y%m%d%H%M")

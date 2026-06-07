@@ -2,8 +2,8 @@ name: Daily Election Data Auto-Update
 
 on:
   schedule:
-    # Run daily at 12:15 UTC (21:15 JST)
-    - cron: '15 12 * * *'
+    # Run hourly at 15 minutes past the hour
+    - cron: '15 * * * *'
   workflow_dispatch:
     # Allow manual triggering from the GitHub repository actions tab
 

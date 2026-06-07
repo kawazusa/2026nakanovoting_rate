@@ -13,14 +13,14 @@
     <meta property="og:url" content="https://kawazusa.github.io/2026nakanovoting_rate/">
     <meta property="og:title" content="中野区長選挙 期日前投票状況ダッシュボード (前回 vs 今回)">
     <meta property="og:description" content="前回（令和4年）と今回（令和8年）の中野区長選挙の期日前投票状況を日ごと比較できるダッシュボードです。毎日21:15頃に最新データへ自動更新されます。">
-    <meta property="og:image" content="https://kawazusa.github.io/2026nakanovoting_rate/ogp-image.png?v=202606061406">
+    <meta property="og:image" content="https://kawazusa.github.io/2026nakanovoting_rate/ogp-image.png?v=202606071126">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://kawazusa.github.io/2026nakanovoting_rate/">
     <meta property="twitter:title" content="中野区長選挙 期日前投票状況ダッシュボード (前回 vs 今回)">
     <meta property="twitter:description" content="前回（令和4年）と今回（令和8年）の中野区長選挙の期日前投票状況を日ごと比較できるダッシュボードです。毎日21:15頃に最新データへ自動更新されます。">
-    <meta property="twitter:image" content="https://kawazusa.github.io/2026nakanovoting_rate/ogp-image.png?v=202606061406">
+    <meta property="twitter:image" content="https://kawazusa.github.io/2026nakanovoting_rate/ogp-image.png?v=202606071126">
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -31,7 +31,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="styles.css?v=202606061406">
+    <link rel="stylesheet" href="styles.css?v=202606071126">
 </head>
 <body>
     <div class="app-container">
@@ -140,6 +140,26 @@
             </div>
         </section>
 
+        <!-- Today's Voting (Election Day Hourly Bulletins) -->
+        <section class="today-voting-section card" aria-label="投票日当日の時間別投票状況">
+            <div class="chart-header" style="padding: 24px 24px 0 24px;">
+                <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
+                    <h3 style="display: flex; align-items: center; gap: 8px;">
+                        <span class="pulse-indicator"></span>
+                        当日投票状況（時間別速報）
+                    </h3>
+                    <span class="badge" style="background: rgba(6, 182, 212, 0.1); color: var(--accent-current);">投票日当日の投票率推移</span>
+                </div>
+                <p class="chart-desc" style="margin-top: 4px;">
+                    投票日当日の時間帯ごとの投票率（今回 vs 前回）。1時間おきに自動更新されます（最終投票締め切り 20:00）。
+                    （出典：<a href="https://www.city.tokyo-nakano.lg.jp/kusei/senkyo/news/260607touhyou.html" target="_blank" rel="noopener noreferrer" style="color: var(--accent-current); text-decoration: underline;">中野区「投票状況」</a>）
+                </p>
+            </div>
+            <div class="chart-body" style="padding: 0 24px 24px 24px; min-height: 340px; height: 340px; position: relative; width: 100%;">
+                <canvas id="today-voting-chart" aria-label="投票日当日時間別投票状況グラフ"></canvas>
+            </div>
+        </section>
+
         <!-- Charts Layout Grid -->
         <section class="charts-grid" aria-label="分析グラフ">
             <!-- Chart 1: Daily Comparison -->
@@ -245,7 +265,7 @@
     </div>
 
     <!-- Data & Script files -->
-    <script src="data.js?v=202606061406"></script>
-    <script src="app.js?v=202606061406"></script>
+    <script src="data.js?v=202606071126"></script>
+    <script src="app.js?v=202606071126"></script>
 </body>
 </html>

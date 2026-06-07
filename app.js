@@ -16,7 +16,8 @@ document.addEventListener('DOMContentLoaded', () => {
         cumulative: null,
         station: null,
         gender: null,
-        past: null
+        past: null,
+        today: null
     };
 
     // DOM Elements
@@ -597,6 +598,112 @@ document.addEventListener('DOMContentLoaded', () => {
                         stacked: true,
                         grid: { color: themeOpts.gridColor },
                         ticks: { color: themeOpts.textColor, font: fontConfig }
+                    }
+                }
+            }
+        });
+
+        // --- Chart 6: Today's Voting (Line Chart) ---
+        const ctxToday = document.getElementById('today-voting-chart').getContext('2d');
+        const todayData = votingData.todayVoting || [];
+        const labelsToday = todayData.map(d => d.time);
+        const ratesToday = todayData.map(d => d.currentRate);
+        const prevRatesToday = todayData.map(d => d.previousRate);
+
+        // Set up line gradients
+        const gradientToday = ctxToday.createLinearGradient(0, 0, 0, 300);
+        gradientToday.addColorStop(0, 'rgba(6, 182, 212, 0.2)');
+        gradientToday.addColorStop(1, 'rgba(6, 182, 212, 0.0)');
+
+        const gradientPrevToday = ctxToday.createLinearGradient(0, 0, 0, 300);
+        gradientPrevToday.addColorStop(0, 'rgba(99, 102, 241, 0.1)');
+        gradientPrevToday.addColorStop(1, 'rgba(99, 102, 241, 0.0)');
+
+        charts.today = new Chart(ctxToday, {
+            type: 'line',
+            data: {
+                labels: labelsToday,
+                datasets: [
+                    {
+                        label: '今回 (令和8年当日投票率)',
+                        data: ratesToday,
+                        borderColor: 'rgba(6, 182, 212, 1)',
+                        backgroundColor: gradientToday,
+                        borderWidth: 3,
+                        pointBackgroundColor: 'rgba(6, 182, 212, 1)',
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 2,
+                        pointRadius: 5,
+                        pointHoverRadius: 7,
+                        fill: true,
+                        tension: 0.15
+                    },
+                    {
+                        label: '前回 (令和4年当日投票率)',
+                        data: prevRatesToday,
+                        borderColor: 'rgba(99, 102, 241, 0.65)',
+                        backgroundColor: gradientPrevToday,
+                        borderWidth: 2,
+                        borderDash: [5, 5],
+                        pointBackgroundColor: 'rgba(99, 102, 241, 0.8)',
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 1,
+                        pointRadius: 4,
+                        pointHoverRadius: 6,
+                        fill: true,
+                        tension: 0.15
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: { color: themeOpts.textColor, font: fontConfig }
+                    },
+                    tooltip: {
+                        backgroundColor: themeOpts.tooltipBg,
+                        titleColor: themeOpts.tooltipText,
+                        bodyColor: themeOpts.tooltipText,
+                        borderColor: themeOpts.tooltipBorder,
+                        borderWidth: 1,
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.dataset.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                if (context.parsed.y !== null) {
+                                    label += context.parsed.y.toFixed(2) + '%';
+                                    
+                                    const idx = context.dataIndex;
+                                    const item = todayData[idx];
+                                    if (item) {
+                                        const votes = context.datasetIndex === 0 ? item.currentVotes : item.previousVotes;
+                                        label += ' (' + votes.toLocaleString() + ' 人)';
+                                    }
+                                }
+                                return label;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { display: false },
+                        ticks: { color: themeOpts.textColor, font: fontConfig }
+                    },
+                    y: {
+                        grid: { color: themeOpts.gridColor },
+                        ticks: { 
+                            color: themeOpts.textColor, 
+                            font: fontConfig,
+                            callback: function(value) {
+                                return value + '%';
+                            }
+                        }
                     }
                 }
             }

@@ -94,6 +94,27 @@ const votingData = {
           "currentRate": 15.44,
           "previousVotes": 43050,
           "previousRate": 15.75
+      },
+      {
+          "time": "17時",
+          "currentVotes": 47800,
+          "currentRate": 17.36,
+          "previousVotes": 48200,
+          "previousRate": 17.63
+      },
+      {
+          "time": "18時",
+          "currentVotes": 52400,
+          "currentRate": 19.03,
+          "previousVotes": 53800,
+          "previousRate": 19.68
+      },
+      {
+          "time": "19時",
+          "currentVotes": 56900,
+          "currentRate": 20.67,
+          "previousVotes": 60100,
+          "previousRate": 21.98
       }
   ],
   

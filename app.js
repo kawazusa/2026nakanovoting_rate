@@ -256,13 +256,26 @@ document.addEventListener('DOMContentLoaded', () => {
         let previousSamePeriodTotal = earlyTotalPrevious;
 
         if (state.station === 'ALL' && latestTodayBulletin) {
-            // Add today's voting if it is for ALL stations
-            currentTotal = earlyTotalCurrent + todayCurrentVotes;
-            previousSamePeriodTotal = earlyTotalPrevious + todayPreviousVotes;
+            // Check if this is the final confirmed turnout (contains '確定' or '最終')
+            const isFinalConfirmed = latestTimeLabel.includes("確定") || latestTimeLabel.includes("最終");
 
-            if (lblCurrentTotalTitle) lblCurrentTotalTitle.textContent = "今回 投票者数合計 (期日前+当日)";
-            if (lblComparisonTitle) lblComparisonTitle.textContent = "前回同時期比 (期日前+当日)";
-            lblCurrentPeriod.textContent = `期日前(終了) + 当日 ${latestTimeLabel}時点`;
+            if (isFinalConfirmed) {
+                // If final confirmed, the number already includes early voting
+                currentTotal = todayCurrentVotes;
+                previousSamePeriodTotal = todayPreviousVotes;
+
+                if (lblCurrentTotalTitle) lblCurrentTotalTitle.textContent = "今回 投票者数合計 (最終確定)";
+                if (lblComparisonTitle) lblComparisonTitle.textContent = "前回同時期比 (最終確定)";
+                lblCurrentPeriod.textContent = `最終確定結果 (${latestTimeLabel})`;
+            } else {
+                // Add today's voting if it is for ALL stations (hourlyday-of bulletins)
+                currentTotal = earlyTotalCurrent + todayCurrentVotes;
+                previousSamePeriodTotal = earlyTotalPrevious + todayPreviousVotes;
+
+                if (lblCurrentTotalTitle) lblCurrentTotalTitle.textContent = "今回 投票者数合計 (期日前+当日)";
+                if (lblComparisonTitle) lblComparisonTitle.textContent = "前回同時期比 (期日前+当日)";
+                lblCurrentPeriod.textContent = `期日前(終了) + 当日 ${latestTimeLabel}時点`;
+            }
         } else {
             // Otherwise, show early voting only (station-specific or no today bulletin data)
             if (lblCurrentTotalTitle) lblCurrentTotalTitle.textContent = "今回 期日前投票者数累計";

@@ -59,6 +59,13 @@ const votingData = {
           "currentRate": 4.36,
           "previousVotes": 11950,
           "previousRate": 4.37
+      },
+      {
+          "time": "12時",
+          "currentVotes": 19900,
+          "currentRate": 7.23,
+          "previousVotes": 19650,
+          "previousRate": 7.19
       }
   ],
   

@@ -57,6 +57,31 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Download CSV
         downloadCsvBtn.addEventListener('click', downloadCSV);
+
+        // Copy Share Link
+        const copyLinkBtn = document.getElementById('copy-link-btn');
+        if (copyLinkBtn) {
+            copyLinkBtn.addEventListener('click', () => {
+                const url = window.location.href.split('?')[0]; // strip version tags
+                navigator.clipboard.writeText(url).then(() => {
+                    const originalText = copyLinkBtn.innerHTML;
+                    copyLinkBtn.innerHTML = `
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent-success)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        コピーしました！
+                    `;
+                    copyLinkBtn.style.borderColor = 'var(--accent-success)';
+                    copyLinkBtn.style.color = 'var(--accent-success)';
+                    
+                    setTimeout(() => {
+                        copyLinkBtn.innerHTML = originalText;
+                        copyLinkBtn.style.borderColor = '';
+                        copyLinkBtn.style.color = '';
+                    }, 2000);
+                }).catch(err => {
+                    console.error('Failed to copy: ', err);
+                });
+            });
+        }
     }
 
     // Toggle Dark / Light Theme

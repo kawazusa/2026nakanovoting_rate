@@ -696,3 +696,77 @@ tbody tr:hover {
 .today-voting-section {
     margin-bottom: 24px;
 }
+
+/* Share Section */
+.share-section {
+    padding: 24px;
+    margin-bottom: 24px;
+}
+
+.share-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    text-align: center;
+}
+
+.share-container h4 {
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+.share-container p {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.share-buttons-group {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-top: 8px;
+}
+
+.btn-share {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    font-family: var(--font-primary);
+    font-size: 0.85rem;
+    font-weight: 600;
+    border-radius: var(--border-radius-sm);
+    cursor: pointer;
+    transition: all var(--transition-speed) var(--transition-curve);
+    border: 1px solid var(--border-color);
+    text-decoration: none;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+}
+
+/* Hover effects */
+.btn-share:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.x-btn:hover {
+    background: #0f1419;
+    color: #ffffff;
+    border-color: #0f1419;
+}
+
+.line-btn:hover {
+    background: #06c755;
+    color: #ffffff;
+    border-color: #06c755;
+}
+
+.copy-btn:hover {
+    background: rgba(var(--accent-current-rgb), 0.05);
+    color: var(--accent-current);
+    border-color: var(--accent-current);
+}

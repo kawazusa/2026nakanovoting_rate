@@ -191,9 +191,9 @@ def get_hourly_voting():
         for m in reversed(matches):
             time_label = m[0].replace("時点", "")
             
-            curr_votes = int(m[1].replace(",", ""))
+            curr_votes = int(m[1].replace(",", "").replace(".", ""))
             curr_rate = float(m[2])
-            prev_votes = int(m[3].replace(",", ""))
+            prev_votes = int(m[3].replace(",", "").replace(".", ""))
             prev_rate = float(m[4])
             
             hourly_data.append({
@@ -410,6 +410,11 @@ def main():
         # Fetch hourly voting data
         hourly_data = get_hourly_voting()
         
+        # On election day (2026-06-07), hourly data must be successfully retrieved.
+        # If it is empty, raise an exception to abort and prevent writing empty data.js.
+        if datetime.now().strftime("%Y-%m-%d") == "2026-06-07" and len(hourly_data) == 0:
+            raise Exception("Election Day hourly voting data fetched empty! Scraping failed or blocked.")
+            
         # Overwrite data.js
         generate_data_js(male_data, female_data, hourly_data, "data.js")
         
